@@ -1,11 +1,11 @@
-// import { BeamsHero } from "./components/BreamsHero"
+import { BeamsHero } from "./components/BreamsHero"
 import Hero from "./components/Hero"
 
 function App() {
   return (
     <div>
       <Hero />
-      {/* <BeamsHero /> */}
+      <BeamsHero />
     </div>
   )
 }
