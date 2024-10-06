@@ -1,5 +1,7 @@
 "use client";
 import { useState } from "react";
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import {
   motion,
   AnimatePresence,
@@ -9,6 +11,7 @@ import {
 import { cn } from "../../lib/utils/cn";
 import { useThemeStore } from "../../context/ThemeContext";
 import { Link } from "react-router-dom";
+import { Checkbox } from "@mui/material";
 
 export const FloatingNav = ({
   navItems,
@@ -42,7 +45,7 @@ export const FloatingNav = ({
     }
   });
 
-  const { ToggleTheme } = useThemeStore();
+  const { ToggleTheme,theme } = useThemeStore();
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -58,7 +61,7 @@ export const FloatingNav = ({
           duration: 0.2,
         }}
         className={cn(
-          "fixed top-10 flex justify-around z-50 w-full",
+          "fixed top-10 items-center flex justify-around z-50 w-full",
           className
         )}
       >
@@ -82,7 +85,14 @@ export const FloatingNav = ({
             <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
           </button>
         </div>
-        <h1 className="absolute right-10">DarkMode</h1>
+        <div onClick={ToggleTheme} className="absolute right-10 w-9 h-9 flex items-center justify-center">
+          <Checkbox
+            aria-label="Darkmode"
+            checked={theme=='dark'}
+            icon={<DarkModeIcon className="text-gray-900 dark:text-white  h-5"/>}
+            checkedIcon={<DarkModeOutlinedIcon className="text-gray-900 dark:text-white "/>}
+          />
+        </div>
 
       </motion.div>
     </AnimatePresence>
