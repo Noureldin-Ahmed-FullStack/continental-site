@@ -4,7 +4,7 @@ interface props{
 }
 export default function CenteredPage(props:props) {
   return (
-    <div className='flex-grow-1 d-flex flex-column justify-content-center align-items-center'>
+    <div className='flex grow flex-col justify-center items-center'>
         {props.children}
     </div>
   )
