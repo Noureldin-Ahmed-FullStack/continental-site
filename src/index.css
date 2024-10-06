@@ -15,6 +15,10 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.FloatingIcon{
+  height:1rem;
+  width:1rem;
+}
 a {
   font-weight: 500;
   color: #646cff;
