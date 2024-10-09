@@ -85,7 +85,7 @@ export const FloatingNav = ({
             <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
           </button>
         </div>
-        <div onClick={ToggleTheme} className="absolute right-10 w-9 h-9 flex items-center justify-center">
+        <div onClick={ToggleTheme} className="absolute right-10 w-9 h-9 z-0 hidden sm:flex items-center justify-center">
           <Checkbox
             aria-label="Darkmode"
             checked={theme=='dark'}

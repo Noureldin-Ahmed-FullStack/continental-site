@@ -1,5 +1,6 @@
 import { Outlet } from "react-router-dom"
 import { FloatingNav } from "./components/ui/floating-navbar"
+import OpenIconSpeedDial from "./components/ui/SpeedDial"
 function App() {
 
   const navbarItems = [
@@ -10,6 +11,7 @@ function App() {
     <div className="grow flex flex-col">
       <FloatingNav navItems={navbarItems} />
       <Outlet />
+      <OpenIconSpeedDial />
     </div>
   )
 }
