@@ -5,7 +5,7 @@
  **/
 
 import { cn } from "../../lib/utils/cn";
-import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
+// import { IconLayoutNavbarCollapse } from "@tabler/icons-react";
 import {
   AnimatePresence,
   MotionValue,
@@ -83,7 +83,7 @@ const FloatingDockMobile = ({
         onClick={() => setOpen(!open)}
         className="h-10 w-10 rounded-full bg-gray-50 dark:bg-neutral-800 flex items-center justify-center"
       >
-        <div className="h-4 w-4 flex justify-center items-center"><IconLayoutNavbarCollapse className=" text-neutral-500 dark:text-neutral-400" /></div>
+        {/* <div className="h-4 w-4 flex justify-center items-center"><IconLayoutNavbarCollapse className=" text-neutral-500 dark:text-neutral-400" /></div> */}
       </button>
     </div>
   );

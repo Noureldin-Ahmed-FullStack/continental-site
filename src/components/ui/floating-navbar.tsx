@@ -1,7 +1,8 @@
 "use client";
 import { useState } from "react";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
-import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
+import WbSunnyIcon from '@mui/icons-material/WbSunny';
+// import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import {
   motion,
   AnimatePresence,
@@ -89,8 +90,8 @@ export const FloatingNav = ({
           <Checkbox
             aria-label="Darkmode"
             checked={theme=='dark'}
-            icon={<DarkModeIcon className="text-gray-900 dark:text-white  h-5"/>}
-            checkedIcon={<DarkModeOutlinedIcon className="text-gray-900 dark:text-white "/>}
+            icon={<WbSunnyIcon className="text-zinc-200 dark:text-white  h-5"/>}
+            checkedIcon={<DarkModeIcon className="text-gray-900 dark:text-white "/>}
           />
         </div>
 
