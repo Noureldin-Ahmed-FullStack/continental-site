@@ -7,11 +7,10 @@ import SaveIcon from '@mui/icons-material/Save';
 import SettingsIcon from '@mui/icons-material/Settings';
 import PrintIcon from '@mui/icons-material/Print';
 import ShareIcon from '@mui/icons-material/Share';
-import EditIcon from '@mui/icons-material/Edit';
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
 import { useThemeStore } from '../../context/ThemeContext';
-
+import CloseIcon from '@mui/icons-material/Close';
 const actions = [
     { icon: <FileCopyIcon />, name: 'Copy' },
     { icon: <SaveIcon />, name: 'Save' },
@@ -28,7 +27,7 @@ export default function OpenIconSpeedDial() {
                 ariaLabel="SpeedDial"
                 FabProps={{ className: 'mySpeedDial' }}
                 sx={{ position: 'fixed', bottom: 16, right: 16 }}
-                icon={<SpeedDialIcon icon={<SettingsIcon />} openIcon={<EditIcon />} />}
+                icon={<SpeedDialIcon icon={<SettingsIcon />} openIcon={<CloseIcon />} />}
             >
                 <SpeedDialAction
                     tooltipTitle='Dark Theme'

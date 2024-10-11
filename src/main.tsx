@@ -4,6 +4,7 @@ import App from './App.tsx'
 import './index.css'
 import './styles/fonts.css'
 import './styles/ExtraComponents.css'
+import './styles/navbar.css'
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './components/HomePage.tsx'
@@ -22,11 +23,11 @@ const router = createBrowserRouter([
     children: [
       { path: "/", element: <HomePage /> },
       { path: "/home", element: <HomePage /> },
+      { path: "/continental", element: <HomePage /> },
       { path: "/managment", element: <HomePage /> },
       { path: "/messages", element: <HomePage /> },
-      { path: "/products/:productId", element: <CenteredPage><HomePage /></CenteredPage> },
-      { path: "/sign-in", element: <CenteredPage><SignUp routing='hash' forceRedirectUrl={'/continental'} /></CenteredPage> },
-      { path: "/sign-up", element: <CenteredPage><SignIn routing='hash' forceRedirectUrl={'/continental'} /></CenteredPage> },
+      { path: "/sign-in", element: <CenteredPage className="mt-20"><SignUp routing='hash' forceRedirectUrl={'/continental'} /></CenteredPage> },
+      { path: "/sign-up", element: <CenteredPage className="mt-20"><SignIn routing='hash' forceRedirectUrl={'/continental'} /></CenteredPage> },
       { path: "*", element: <CenteredPage><NotFoundPage /></CenteredPage> },
     ]
   }
