@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import DarkModeIcon from '@mui/icons-material/DarkMode';
 import WbSunnyIcon from '@mui/icons-material/WbSunny';
 // import DarkModeOutlinedIcon from '@mui/icons-material/DarkModeOutlined';
@@ -11,8 +11,9 @@ import {
 } from "framer-motion";
 import { cn } from "../../lib/utils/cn";
 import { useThemeStore } from "../../context/ThemeContext";
-import { Link } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@mui/material";
+import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
 
 export const FloatingNav = ({
   navItems,
@@ -46,7 +47,17 @@ export const FloatingNav = ({
     }
   });
 
-  const { ToggleTheme,theme } = useThemeStore();
+  const { ToggleTheme, theme } = useThemeStore();
+  const navigate = useNavigate();
+  const goTo = (path: String) => {
+    navigate('/' + path);
+  }
+  const location = useLocation();
+  const [currentPath, setCurrentPath] = useState(location.pathname);
+
+  useEffect(() => {
+    setCurrentPath(location.pathname);
+  }, [location]);
   return (
     <AnimatePresence mode="wait">
       <motion.div
@@ -62,7 +73,7 @@ export const FloatingNav = ({
           duration: 0.2,
         }}
         className={cn(
-          "fixed top-10 items-center flex justify-around z-50 w-full",
+          "fixed top-10 items-center flex justify-around z-50 w-full ",
           className
         )}
       >
@@ -74,24 +85,29 @@ export const FloatingNav = ({
               key={`link=${idx}`}
               to={navItem.link}
               className={cn(
-                "relative dark:text-neutral-50 items-center font-bold flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500"
+                "relative dark:text-neutral-50 hover:border-b-2 border-gray-500 navLinks items-center font-bold flex space-x-1 text-neutral-600 dark:hover:text-neutral-300 hover:text-neutral-500", currentPath == "/" + navItem.link ? "navOutline border-b-emerald-700 dark:border-b-blue-700" : ""
               )}
             >
               <span className="block sm:hidden">{navItem.icon}</span>
               <span className="text-sm">{navItem.name}</span>
             </Link>
           ))}
-          <button onClick={ToggleTheme} className="border text-sm font-medium relative border-white/[0.2] text-white px-4 py-2 rounded-full">
-            <span>Login</span>
-            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
-          </button>
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+          <SignedOut>
+            <button onClick={() => goTo("sign-up")} className="border text-sm font-medium relative border-white/[0.2] text-white px-4 py-2 rounded-full">
+              <span>Login</span>
+              <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
+            </button>
+          </SignedOut>
         </div>
         <div onClick={ToggleTheme} className="absolute right-10 w-9 h-9 z-0 hidden sm:flex items-center justify-center">
           <Checkbox
             aria-label="Darkmode"
-            checked={theme=='dark'}
-            icon={<WbSunnyIcon className="text-zinc-200 dark:text-white  h-5"/>}
-            checkedIcon={<DarkModeIcon className="text-gray-900 dark:text-white "/>}
+            checked={theme == 'dark'}
+            icon={<WbSunnyIcon className="text-zinc-200 dark:text-white  h-5" />}
+            checkedIcon={<DarkModeIcon className="text-gray-900 dark:text-white " />}
           />
         </div>
 
