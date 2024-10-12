@@ -11,7 +11,7 @@ function App() {
   const { setUserData } = useUserContext();
   
   const navbarItems = [
-    { name: 'Home', link: 'home' }, { name: 'Posts', link: 'Posts' }, { name: 'News', link: 'News' }, { name: 'Managment', link: 'Managment' }
+    { name: 'Home', link: 'home' }, { name: 'social', link: 'social' }, { name: 'News', link: 'News' }, { name: 'Managment', link: 'Managment' }
   ]
   useEffect(() => {
     if (!user && !isSignedIn) {
