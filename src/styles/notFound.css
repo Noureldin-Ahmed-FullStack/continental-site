@@ -74,7 +74,7 @@
   z-index: 0;
   background-color: #007bff;
   /* Blue side background */
-  clip-path: ellipse(50% 120% at 100% 0);
+  clip-path: ellipse(50% 180% at 100% 0);
   /* Creates the curve */
 }
 
