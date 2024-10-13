@@ -18,8 +18,8 @@ export function SinglePost(props: SocialPost) {
     <div className="">
       <FullScreenDialog open={open} handleClose={handleClose} image={props.image} />
       <div className=" w-full relative maxWidth80vw">
-        <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] bg-red-500 rounded-full blur-3xl" />
-        <div className="relative shadow-xl bg-gray-900 border border-gray-800  px-4 py-8 pt-4 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
+        <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />
+        <div className="relative shadow-xl myLightPost dark:bg-gray-900 border border-gray-800 dark:text-gray-300 text-slate-700 px-4 py-8 pt-4 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
           {/* <div className="h-5 w-5 rounded-full border flex items-center justify-center mb-4 border-gray-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -39,11 +39,11 @@ export function SinglePost(props: SocialPost) {
           <div className="flex mb-2">
             <img className="me-2 w-12 h-12 rounded-full" src="https://lh3.googleusercontent.com/ogw/AF2bZyhDBgxnnU2NAM5oZkt1Qqel8eybqspUwEzqHDwy8R2-rvs=s32-c-mo" alt="PFP" />
             <div>
-              <h6>Noureldin Ahmed</h6>
+              <a href="/" className="ProfileLink">Noureldin Ahmed</a>
               <p>Admin</p>
             </div>
           </div>
-          <h1 className="font-bold text-xl text-white mb-4 relative z-10">
+          <h1 className="font-bold text-xl text-slate-700 dark:text-gray-300 mb-4 relative z-10">
             {props.title}
           </h1>
 
@@ -59,7 +59,7 @@ export function SinglePost(props: SocialPost) {
             </button> */}
 
           {/* Meaty part - Meteor effect */}
-          <Meteors number={20} />
+          <Meteors number={10} />
         </div>
       </div>
     </div>

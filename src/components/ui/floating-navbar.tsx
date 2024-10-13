@@ -96,7 +96,7 @@ export const FloatingNav = ({
             <UserButton />
           </SignedIn>
           <SignedOut>
-            <button onClick={() => goTo("sign-up")} className="border text-sm font-medium relative border-white/[0.2] text-white px-4 py-2 rounded-full">
+            <button onClick={() => goTo("sign-up")} className="border myDarkBG text-sm font-medium relative border-white/[0.2] text-white px-4 py-2 rounded-full">
               <span>Login</span>
               <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
             </button>
@@ -106,8 +106,15 @@ export const FloatingNav = ({
           <Checkbox
             aria-label="Darkmode"
             checked={theme == 'dark'}
-            icon={<WbSunnyIcon className="text-zinc-200 dark:text-white  h-5" />}
-            checkedIcon={<DarkModeIcon className="text-gray-900 dark:text-white " />}
+            icon={<WbSunnyIcon
+              sx={{
+                stroke: 'black',
+                strokeWidth: 0.1, // Adjust thickness here
+              }} className="text-zinc-200 dark:text-white  h-5" />}
+            checkedIcon={<DarkModeIcon sx={{
+              stroke: 'black',
+              strokeWidth: 0.1, // Adjust thickness here
+            }} className="text-gray-900 dark:text-white " />}
           />
         </div>
 
