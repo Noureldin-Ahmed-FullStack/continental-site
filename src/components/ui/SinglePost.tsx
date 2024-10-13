@@ -19,7 +19,7 @@ export function SinglePost(props: SocialPost) {
       <FullScreenDialog open={open} handleClose={handleClose} image={props.image} />
       <div className=" w-full relative maxWidth80vw">
         <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] bg-red-500 rounded-full blur-3xl" />
-        <div className="relative shadow-xl bg-gray-900 border border-gray-800  px-4 py-8 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
+        <div className="relative shadow-xl bg-gray-900 border border-gray-800  px-4 py-8 pt-4 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
           {/* <div className="h-5 w-5 rounded-full border flex items-center justify-center mb-4 border-gray-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -36,12 +36,18 @@ export function SinglePost(props: SocialPost) {
               />
             </svg>
           </div> */}
-
-          <h1 className="font-bold text-xl text-white mb-4 relative z-50">
+          <div className="flex mb-2">
+            <img className="me-2 w-12 h-12 rounded-full" src="https://lh3.googleusercontent.com/ogw/AF2bZyhDBgxnnU2NAM5oZkt1Qqel8eybqspUwEzqHDwy8R2-rvs=s32-c-mo" alt="PFP" />
+            <div>
+              <h6>Noureldin Ahmed</h6>
+              <p>Admin</p>
+            </div>
+          </div>
+          <h1 className="font-bold text-xl text-white mb-4 relative z-10">
             {props.title}
           </h1>
 
-          <p className="font-normal text-base text-slate-500 mb-4 relative z-50">
+          <p className="font-normal text-base text-slate-500 mb-4 relative z-10">
             {/* I don&apos;t know what to write so I&apos;ll just paste something
             cool here. One more sentence because lorem ipsum is just
             unacceptable. Won&apos;t ChatGPT the shit out of this. */}
