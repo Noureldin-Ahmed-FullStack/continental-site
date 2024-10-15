@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -8,7 +7,24 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { TransitionProps } from '@mui/material/transitions';
 import { Slide } from '@mui/material';
 import { SocialPost } from '../../types';
+import { PlaceholdersAndVanishInput } from './placeholders-and-vanish-input';
 
+const placeholders = [
+    "What's the first rule of Fight Club?",
+    "Who is Tyler Durden?",
+    "Where is Andrew Laeddis Hiding?",
+    "Write a Javascript method to reverse a string",
+    "How to assemble your own PC?",
+  ];
+  const handleChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
+    // console.log(e.target.value);
+  };
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    const form = e.target as HTMLFormElement;
+    const firstInputValue = (form.elements[0] as HTMLInputElement).value;
+    console.log(firstInputValue);
+  };
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
         children: React.ReactElement<unknown>;
@@ -41,7 +57,7 @@ export default function CommentsModal(props: props) {
                 }}
             >
                 <DialogTitle>Comments</DialogTitle>
-                <DialogContent>
+                <DialogContent className='CommentScreen'>
                     <Box
                         noValidate
                         component="form"
@@ -52,11 +68,19 @@ export default function CommentsModal(props: props) {
                             width: 'fit-content',
                         }}
                     >
-                        {postData.title}
+                        <h3 className='font-bold'>{postData.title}</h3>
+                        <p className='my-3'>{postData.content}</p>
+                        <img src={postData.image} className="rounded-lg" alt={postData.title} />
                     </Box>
+
                 </DialogContent>
-                <DialogActions>
-                    <Button onClick={handleClose}>Close</Button>
+                <DialogActions sx={{ justifyContent: "start" }}>
+                    <img className='h-10 w-10 rounded-full' src="https://ssniper.sirv.com/Images/my%20portfolio/pfp.jpg" alt="pfp" />
+                    <PlaceholdersAndVanishInput
+                        placeholders={placeholders}
+                        onChange={handleChange}
+                        onSubmit={onSubmit}
+                    />
                 </DialogActions>
             </Dialog>
         </React.Fragment>
