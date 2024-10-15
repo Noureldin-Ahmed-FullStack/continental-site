@@ -7,7 +7,6 @@ import { Button } from "@mui/material";
 import CommentsModal from './CommentsModal';
 
 export function SinglePost(props: SocialPost) {
-
   const [open, setOpen] = useState(false);
   const [SelectedPost, setSelectedPost] = useState<SocialPost>({});
 
