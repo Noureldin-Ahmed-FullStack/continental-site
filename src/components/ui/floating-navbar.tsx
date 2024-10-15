@@ -13,7 +13,7 @@ import { cn } from "../../lib/utils/cn";
 import { useThemeStore } from "../../context/ThemeContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Checkbox } from "@mui/material";
-import { SignedIn, SignedOut, UserButton } from "@clerk/clerk-react";
+import { UserButton, useUser } from "@clerk/clerk-react";
 
 export const FloatingNav = ({
   navItems,
@@ -47,6 +47,7 @@ export const FloatingNav = ({
     }
   });
 
+  const { isSignedIn, isLoaded } = useUser(); // Clerk's hook
   const { ToggleTheme, theme } = useThemeStore();
   const navigate = useNavigate();
   const goTo = (path: String) => {
@@ -92,15 +93,12 @@ export const FloatingNav = ({
               <span className="text-sm">{navItem.name}</span>
             </Link>
           ))}
-          <SignedIn>
-            <UserButton />
-          </SignedIn>
-          <SignedOut>
-            <button onClick={() => goTo("sign-up")} className="border myDarkBG text-sm font-medium relative border-white/[0.2] text-white px-4 py-2 rounded-full">
-              <span>Login</span>
-              <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
-            </button>
-          </SignedOut>
+          {(isSignedIn && isLoaded)? < UserButton /> :
+          (<button onClick={() => goTo("sign-up")} className="border myDarkBG text-sm font-medium relative border-white/[0.2] text-white px-4 py-2 rounded-full">
+            <span>Login</span>
+            <span className="absolute inset-x-0 w-1/2 mx-auto -bottom-px bg-gradient-to-r from-transparent via-blue-500 to-transparent  h-px" />
+          </button>)
+        }
         </div>
         <div onClick={ToggleTheme} className="absolute right-10 w-9 h-9 z-0 hidden sm:flex items-center justify-center">
           <Checkbox
