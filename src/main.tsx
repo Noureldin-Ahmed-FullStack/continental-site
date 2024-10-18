@@ -6,6 +6,7 @@ import './styles/fonts.css'
 import './styles/Post.css'
 import './styles/ExtraComponents.css'
 import './styles/navbar.css'
+import { ToastContainer } from 'react-toastify';
 
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './components/HomePage.tsx'
@@ -44,6 +45,8 @@ createRoot(document.getElementById('root')!).render(
     <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
       {/* <App /> */}
+      
+      <ToastContainer />
       <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
   </ClerkProvider>

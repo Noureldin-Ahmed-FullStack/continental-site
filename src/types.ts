@@ -1,5 +1,4 @@
 export interface SocialPost{
-    title?:string
     content?:string
     comments? : Comments[]
     createdBy?:string

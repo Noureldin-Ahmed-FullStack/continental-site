@@ -71,9 +71,8 @@ export default function CommentsModal(props: props) {
                             width: 'fit-content',
                         }}
                     >
-                        <h3 className='font-bold'>{postData.title}</h3>
                         <p className='my-3'>{postData.content}</p>
-                        <img src={postData.image} className="rounded-lg" alt={postData.title} />
+                        <img src={postData.image} className="rounded-lg" alt={postData.content} />
                         <div className='mt-3'>
                             {postData.comments?.map((item, index) => (
                                 <div className='flex justify-start my-2' key={index}>

@@ -4,9 +4,9 @@ import { SocialPost } from '../types'
 const BaseURL = import.meta.env.VITE_BASE_URL;
 const fetchSocialPosts = async (query: string) => {
     try {
-        const response = await axios.get(BaseURL + query);
+        const response = await axios.get(BaseURL + "/GetPosts/" + query);
         if (response) {
-        return response.data.meals as SocialPost[];
+            return response.data as SocialPost[];
         }
         return []
     } catch (error) {
@@ -18,9 +18,9 @@ const fetchSocialPosts = async (query: string) => {
 const fetchSocialPostDetails = async (SocialPostId: string) => {
     try {
         const response = await axios.get(`${BaseURL}/lookup.php?i=${SocialPostId}`);
-        console.log(response.data.meals[0]);
-        
-        return response.data.meals[0] as SocialPost;
+        console.log(response.data);
+
+        return response.data as SocialPost;
     } catch (error) {
         console.error(error);
         return null
