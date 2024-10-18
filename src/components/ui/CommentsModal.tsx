@@ -68,11 +68,12 @@ export default function CommentsModal(props: props) {
                             display: 'flex',
                             flexDirection: 'column',
                             m: 'auto',
-                            width: 'fit-content',
                         }}
                     >
-                        <p className='my-3'>{postData.content}</p>
-                        <img src={postData.image} className="rounded-lg" alt={postData.content} />
+                        <p className={"my-3 text-start" + (postData.content && /[\u0600-\u06FF]/.test(postData.content) ? " text-end" : "")}>
+                            {postData.content || ""}
+                        </p>
+                        {postData.image && <img src={postData.image} className="rounded-lg" alt={postData.content} />}
                         <div className='mt-3'>
                             {postData.comments?.map((item, index) => (
                                 <div className='flex justify-start my-2' key={index}>

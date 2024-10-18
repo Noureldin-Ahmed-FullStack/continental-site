@@ -58,12 +58,13 @@ export function SinglePost(props: SocialPost) {
               <p>Admin</p>
             </div>
           </div>
-          <p className="font-normal text-base text-slate-500 mb-4 relative z-10">
+          <p className={"font-normal w-full text-base whitespace-pre-line text-slate-500 mb-4 relative z-10"+ (props.content && /[\u0600-\u06FF]/.test(props.content) ? " text-end" : "")}>
             {/* I don&apos;t know what to write so I&apos;ll just paste something
             cool here. One more sentence because lorem ipsum is just
             unacceptable. Won&apos;t ChatGPT the shit out of this. */}
             {props.content}
           </p>
+          
           {props.image && <img onClick={handleClickOpen} className="w-full rounded-2xl cursor-pointer" src={props.image} />}
           {/* <button className="border px-4 py-1 rounded-lg  border-gray-500 text-gray-300">
               Explore
