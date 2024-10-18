@@ -3,7 +3,8 @@
 import { create } from "zustand";
 interface userType{
   userName:string,
-  userPFP:String
+  _id:string,
+  userPFP:string,
 }
 // Function to save state to local storage
 const saveToLocalStorage = (key: string, value: string) => {
