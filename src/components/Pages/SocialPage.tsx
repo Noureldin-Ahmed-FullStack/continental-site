@@ -26,7 +26,7 @@ import { SinglePost } from "../ui/SinglePost";
 // },]
 export default function SocialPage() {
 
-  const { data } = useSocialPosts("10");
+  const { data } = useSocialPosts(1);
   return (
     <div className="dark:bg-gradient-to-t dark:from-cyan-900 dark:via-green-700 dark:to-teal-900 bg-gradient-to-tr from-stone-300 from-0% via-amber-100 to-emerald-100 relative grow">
       <div className="mt-28 flex justify-center ">
