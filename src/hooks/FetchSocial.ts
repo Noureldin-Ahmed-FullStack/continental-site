@@ -2,9 +2,9 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { SocialPost } from '../types'
 const BaseURL = import.meta.env.VITE_BASE_URL;
-const fetchSocialPosts = async (query: string) => {
+const fetchSocialPosts = async (pageNumber: number) => {
     try {
-        const response = await axios.get(BaseURL + "/GetPosts/" + query);
+        const response = await axios.get(BaseURL + "/post/" + pageNumber);
         if (response) {
             return response.data as SocialPost[];
         }
@@ -28,10 +28,10 @@ const fetchSocialPostDetails = async (SocialPostId: string) => {
 
 };
 
-export const useSocialPosts = (query: string) => {
+export const useSocialPosts = (pageNumber: number) => {
     return useQuery({
-        queryKey: ['SocialPosts', query],
-        queryFn: () => fetchSocialPosts(query),
+        queryKey: ['SocialPosts', pageNumber],
+        queryFn: () => fetchSocialPosts(pageNumber),
         staleTime: 5 * 60 * 1000, // 5 minutes
         refetchOnWindowFocus: false, // Do not refetch on window focus
     });
