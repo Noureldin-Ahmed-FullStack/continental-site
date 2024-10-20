@@ -20,7 +20,7 @@ export function SinglePost(props: SocialPost) {
 
   const [CommentOpen, setCommentOpen] = useState(false);
 
-  const handleClickCommentOpen = (item:SocialPost) => {
+  const handleClickCommentOpen = (item: SocialPost) => {
     setSelectedPost(item)
     setCommentOpen(true);
   };
@@ -31,10 +31,10 @@ export function SinglePost(props: SocialPost) {
   return (
     <div className="">
       <FullScreenDialog open={open} handleClose={handleClose} image={props.image} />
-      <CommentsModal postData={SelectedPost} open={CommentOpen} handleClose={handleCommentClose}/>
+      <CommentsModal postData={SelectedPost} open={CommentOpen} handleClose={handleCommentClose} />
       <div className=" w-full relative maxWidth80vw">
         <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />
-        <div className="relative shadow-xl myLightPost dark:bg-gray-900 border border-gray-800 dark:text-gray-300 text-slate-700 p-4 pt-4 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
+        <div className="relative shadow-xl myLightPost dark:bg-gray-900 border border-gray-800 dark:text-gray-300 text-slate-700 pb-0 p-4 pt-4 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
           {/* <div className="h-5 w-5 rounded-full border flex items-center justify-center mb-4 border-gray-500">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -51,20 +51,25 @@ export function SinglePost(props: SocialPost) {
               />
             </svg>
           </div> */}
-          <div className="flex mb-2">
-            <img className="me-2 w-12 h-12 rounded-full" src="https://lh3.googleusercontent.com/ogw/AF2bZyhDBgxnnU2NAM5oZkt1Qqel8eybqspUwEzqHDwy8R2-rvs=s32-c-mo" alt="PFP" />
+          <div className="flex justify-between mb-2 w-full">
+            <div className='flex'>
+              <img className="me-2 w-12 h-12 rounded-full" src="https://lh3.googleusercontent.com/ogw/AF2bZyhDBgxnnU2NAM5oZkt1Qqel8eybqspUwEzqHDwy8R2-rvs=s32-c-mo" alt="PFP" />
+              <div>
+                <a href="/" className="ProfileLink">Noureldin Ahmed</a>
+                <p>Admin</p>
+              </div>
+            </div>
             <div>
-              <a href="/" className="ProfileLink">Noureldin Ahmed</a>
-              <p>Admin</p>
+              <p>{props.createdAt}</p>
             </div>
           </div>
-          <p className={"font-normal w-full text-base whitespace-pre-line text-slate-500 mb-4 relative z-10"+ (props.content && /[\u0600-\u06FF]/.test(props.content) ? " text-end" : "")}>
+          <p className={"font-normal w-full text-base whitespace-pre-line text-slate-500 mb-4 relative z-10" + (props.content && /[\u0600-\u06FF]/.test(props.content) ? " text-end" : "")}>
             {/* I don&apos;t know what to write so I&apos;ll just paste something
             cool here. One more sentence because lorem ipsum is just
             unacceptable. Won&apos;t ChatGPT the shit out of this. */}
             {props.content}
           </p>
-          
+
           {props.image && <img onClick={handleClickOpen} className="w-full rounded-2xl cursor-pointer" src={props.image} />}
           {/* <button className="border px-4 py-1 rounded-lg  border-gray-500 text-gray-300">
               Explore
@@ -72,7 +77,7 @@ export function SinglePost(props: SocialPost) {
           {/* Meaty part - Meteor effect */}
           <div className="bg-slate-500 h-px mt-3 opacity-50 w-full"></div>
           <div className="text-center w-full">
-          <Button onClick={()=>handleClickCommentOpen(props)} startIcon={<ModeCommentOutlinedIcon />} variant="text">View Comments</Button>
+            <Button onClick={() => handleClickCommentOpen(props)} startIcon={<ModeCommentOutlinedIcon />} variant="text">View Comments</Button>
           </div>
           <Meteors number={10} />
         </div>

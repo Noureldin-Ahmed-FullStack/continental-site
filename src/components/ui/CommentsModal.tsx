@@ -18,6 +18,7 @@ const placeholders = [
 ];
 const handleChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
     // console.log(e.target.value);
+    return
 };
 const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -57,7 +58,8 @@ export default function CommentsModal(props: props) {
                     },
                 }}
             >
-                <DialogTitle sx={{ justifyContent: "space-between", display: 'flex' }}><p>Comments</p> <IconButton color='inherit' aria-label="close">
+                <DialogTitle sx={{ justifyContent: "space-between", display: 'flex' }}><p>Comments</p> 
+                <IconButton onClick={handleClose} color='inherit' aria-label="close">
                     <CloseTwoToneIcon />
                 </IconButton></DialogTitle>
                 <DialogContent className='CommentScreen'>
@@ -70,7 +72,7 @@ export default function CommentsModal(props: props) {
                             m: 'auto',
                         }}
                     >
-                        <p className={"my-3 text-start" + (postData.content && /[\u0600-\u06FF]/.test(postData.content) ? " text-end" : "")}>
+                        <p className={"my-3 text-start whitespace-pre-wrap" + (postData.content && /[\u0600-\u06FF]/.test(postData.content) ? " text-end" : "")}>
                             {postData.content || ""}
                         </p>
                         {postData.image && <img src={postData.image} className="rounded-lg" alt={postData.content} />}
@@ -78,7 +80,7 @@ export default function CommentsModal(props: props) {
                             {postData.comments?.map((item, index) => (
                                 <div className='flex justify-start my-2' key={index}>
                                     <img className='h-10 w-10 rounded-full' src={item.userPFP} alt="pfp" />
-                                    <div className='bg-zinc-700 opacity-70 w-full ms-5 rounded-lg px-3'>{item.content}</div>
+                                    <div className='bg-zinc-700 opacity-70 w-full ms-5 rounded-lg px-3 whitespace-pre-wrap'>{item.content}</div>
                                 </div>
                             ))}
                         </div>
