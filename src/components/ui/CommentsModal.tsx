@@ -41,7 +41,6 @@ interface props {
 }
 export default function CommentsModal(props: props) {
     const { handleClose, open, postData } = props
-    console.log(postData);
 
     return (
         <React.Fragment>

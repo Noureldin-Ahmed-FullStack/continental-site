@@ -8,6 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Meteors } from "./ui/meteors";
 import { Input } from "./ui/aceternityInput";
 import FileUpload from "./ui/customFileUpload";
+import { SocialPost } from "../types";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -44,20 +45,38 @@ export default function AddPost() {
     const handleClose = () => {
         setOpen(false);
     };
-    const addPost = () => {
+    const addPost = (postData: SocialPost) => {
         console.log({ content: ContentState });
+        if (!userData) {
+            console.log("Sign in first!");
+            
+            setContentState("")
+            if (contenteRef.current) {
+                contenteRef.current.value = '';
+            }
+            handleClose();
+            toast.error("Sign in first!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return
+        }
         axios
-            .post(`${BaseURL}/post`, {
-                createdBy: userData?._id,
-                Post: { content: ContentState }
-            })
+            .post(`${BaseURL}post/${userData._id}`, postData)
             .then((response) => {
                 console.log(response);
-                handleClose();
                 setContentState("")
                 if (contenteRef.current) {
                     contenteRef.current.value = '';
                 }
+                handleClose();
+                
                 // FetchPosts()
             })
             .catch((error) => {
@@ -77,7 +96,13 @@ export default function AddPost() {
     };
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        addPost();
+        const formData = new FormData(e.currentTarget);
+        const formJson = Object.fromEntries((formData as any).entries());
+        // console.log(formJson.Content_textarea);
+
+        addPost({
+            content: formJson.Content_textarea
+        });
     };
 
     // const FetchPosts = () => {
@@ -117,26 +142,27 @@ export default function AddPost() {
                     className: '!bg-slate-50 dark:!bg-slate-800 dark:!text-slate-50'
                 }}
             >
-                <DialogTitle className="text-center relative">
-                    <p>Create post</p>
-                    <IconButton
-                        color="inherit"
-                        className="!absolute top-3 right-4"
-                        onClick={handleClose}
-                        aria-label="close"
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </DialogTitle>
-                <DialogContent>
-                    <DialogContentText
-                        component={"div"}
-                        id="alert-dialog-slide-description"
-                    >
-                        <form onSubmit={handleSubmit}>
+                <form onSubmit={handleSubmit}>
+                    <DialogTitle className="text-center relative">
+                        <p>Create post</p>
+                        <IconButton
+                            color="inherit"
+                            className="!absolute top-3 right-4"
+                            onClick={handleClose}
+                            aria-label="close"
+                        >
+                            <CloseIcon />
+                        </IconButton>
+                    </DialogTitle>
+                    <DialogContent>
+                        <DialogContentText
+                            component={"div"}
+                            id="alert-dialog-slide-description"
+                        >
                             <div className="flex flex-col pt-3">
                                 <TextField
-                                    id="Content-textarea"
+                                    id="Content_textarea"
+                                    name="Content_textarea"
                                     label="Post Content"
                                     placeholder={"What's on your mind?"}
                                     rows={4}
@@ -156,12 +182,12 @@ export default function AddPost() {
                             <div className="mt-5">
                                 <FileUpload onChange={handleFileChange} />
                             </div>
-                        </form>
-                    </DialogContentText>
-                </DialogContent>
-                <DialogActions>
-                    <Button className="w-full" variant="contained" onClick={addPost}>Post</Button>
-                </DialogActions>
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions>
+                        <Button className="w-full" variant="contained" type="submit">Post</Button>
+                    </DialogActions>
+                </form>
             </Dialog>
             <div className=" w-full relative maxWidth80vw">
                 <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />

@@ -16,6 +16,7 @@ import NotFoundPage from './components/NotFoundPage.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import SocialPage from './components/Pages/SocialPage.tsx'
+import 'react-toastify/dist/ReactToastify.css';
 import Managment from './components/Pages/Managment.tsx'
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 

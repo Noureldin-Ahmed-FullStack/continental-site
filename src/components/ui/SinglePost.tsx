@@ -9,6 +9,38 @@ import CommentsModal from './CommentsModal';
 export function SinglePost(props: SocialPost) {
   const [open, setOpen] = useState(false);
   const [SelectedPost, setSelectedPost] = useState<SocialPost>({});
+  function formatDateTime(timestamp: string | undefined) {
+    if (!timestamp) {
+      return
+    }
+    const date = new Date(timestamp);
+    const now = new Date();
+
+    const diffInMs = now.getTime() - date.getTime();
+    const diffInSeconds = Math.floor(diffInMs / 1000);
+    const diffInMinutes = Math.floor(diffInSeconds / 60);
+    const diffInHours = Math.floor(diffInMinutes / 60);
+    const diffInDays = Math.floor(diffInHours / 24);
+    const diffInWeeks = Math.floor(diffInDays / 7);
+
+    // If the time difference is less than a week, show relative time
+    if (diffInWeeks < 1) {
+      if (diffInMinutes < 1) return "just now";
+      if (diffInMinutes < 60) return `${diffInMinutes} minute${diffInMinutes > 1 ? 's' : ''} ago`;
+      if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`;
+      return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`;
+    }
+
+    // If it's more than a week old, return the date in the format "DD-MM-YYYY"
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // Months are 0-based
+    const year = date.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+
+  // Example usage:
+  console.log(formatDateTime("2024-10-20T11:53:18.111Z"));
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -60,7 +92,7 @@ export function SinglePost(props: SocialPost) {
               </div>
             </div>
             <div>
-              <p>{props.createdAt}</p>
+              <p>{formatDateTime(props.createdAt)}</p>
             </div>
           </div>
           <p className={"font-normal w-full text-base whitespace-pre-line text-slate-500 mb-4 relative z-10" + (props.content && /[\u0600-\u06FF]/.test(props.content) ? " text-end" : "")}>
