@@ -26,13 +26,22 @@ export default function OpenIconSpeedDial() {
             <SpeedDial
                 ariaLabel="SpeedDial"
                 FabProps={{ className: 'mySpeedDial' }}
-                sx={{ position: 'fixed', bottom: 16, right: 16 }}
+                sx={{ position: 'fixed', bottom: 16, right: 16 ,
+                    '& .MuiFab-root:focus': {
+                        outline: 'none',
+                        boxShadow: 'none',
+                    },
+                    '& .MuiFab-root:active': {
+                        outline: 'none',
+                        boxShadow: 'none',
+                    },
+                }}
                 icon={<SpeedDialIcon icon={<SettingsIcon />} openIcon={<CloseIcon />} />}
             >
                 <SpeedDialAction
                     tooltipTitle='Dark Theme'
                     onClick={ToggleTheme}
-                    icon={theme == 'dark' ? <DarkModeOutlinedIcon/> : <DarkModeIcon />}
+                    icon={theme == 'dark' ? <DarkModeOutlinedIcon /> : <DarkModeIcon />}
                 />
                 {actions.map((action) => (
                     <SpeedDialAction
