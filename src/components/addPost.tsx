@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide, TextField } from "@mui/material";
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useUserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 import { TransitionProps } from "@mui/material/transitions";
@@ -39,9 +39,12 @@ export default function AddPost() {
     const handleClickOpen = () => {
         setOpen(true);
     };
-    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setContentState(e.target.value)
-    }
+    const handleContentChange = useCallback(
+        (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            setContentState(e.target.value);
+        },
+        [setContentState] // Add dependencies here
+    );
     const handleClose = () => {
         setOpen(false);
     };
@@ -49,7 +52,7 @@ export default function AddPost() {
         console.log({ content: ContentState });
         if (!userData) {
             console.log("Sign in first!");
-            
+
             setContentState("")
             if (contenteRef.current) {
                 contenteRef.current.value = '';
@@ -76,7 +79,7 @@ export default function AddPost() {
                     contenteRef.current.value = '';
                 }
                 handleClose();
-                
+
                 // FetchPosts()
             })
             .catch((error) => {
@@ -94,40 +97,7 @@ export default function AddPost() {
                 handleClose();
             });
     };
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const formData = new FormData(e.currentTarget);
-        const formJson = Object.fromEntries((formData as any).entries());
-        // console.log(formJson.Content_textarea);
 
-        addPost({
-            content: formJson.Content_textarea
-        });
-    };
-
-    // const FetchPosts = () => {
-    //     axios
-    //         .post(`${BaseURL}/GetPosts`)
-    //         .then((response) => {
-    //             console.log(response.data);
-    //             setItems(response.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error:", error);
-    //             toast.error(error.message, {
-    //                 position: "top-center",
-    //                 autoClose: 5000,
-    //                 hideProgressBar: false,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //                 theme: "light",
-    //             });
-    //         });
-    // }
-
-    // const placeholderText = "ex: \n1- Make Breakfast\n2- Do dishes";
     return (
         <div>
             <Dialog
@@ -136,58 +106,66 @@ export default function AddPost() {
                 open={open}
                 TransitionComponent={Transition}
                 keepMounted
+                maxWidth="md"
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
                 PaperProps={{
-                    className: '!bg-slate-50 dark:!bg-slate-800 dark:!text-slate-50'
+                    className: '!bg-slate-50 dark:!bg-slate-800 dark:!text-slate-50',
+                    component: 'form',
+                    onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
+                        event.preventDefault();
+                        const formData = new FormData(event.currentTarget);
+                        const formJson = Object.fromEntries((formData as any).entries());
+                        addPost({
+                            content: formJson.Content_textarea
+                        });
+                    },
                 }}
             >
-                <form onSubmit={handleSubmit}>
-                    <DialogTitle className="text-center relative">
-                        <p>Create post</p>
-                        <IconButton
-                            color="inherit"
-                            className="!absolute top-3 right-4"
-                            onClick={handleClose}
-                            aria-label="close"
-                        >
-                            <CloseIcon />
-                        </IconButton>
-                    </DialogTitle>
-                    <DialogContent>
-                        <DialogContentText
-                            component={"div"}
-                            id="alert-dialog-slide-description"
-                        >
-                            <div className="flex flex-col pt-3">
-                                <TextField
-                                    id="Content_textarea"
-                                    name="Content_textarea"
-                                    label="Post Content"
-                                    placeholder={"What's on your mind?"}
-                                    rows={4}
-                                    className="w-full  custom-textfield"
-                                    multiline
-                                    onChange={handleContentChange}
-                                    inputRef={contenteRef}
-                                    InputProps={{
-                                        className: 'dark:text-slate-50 dark:placeholder:text-gray-400 ', // Text color and placeholder color
-                                        style: { whiteSpace: "pre-line", scrollbarWidth: 'thin' }, // Allow newline in placeholder
-                                    }}
-                                    InputLabelProps={{
-                                        className: 'dark:!text-white', // Change label color here
-                                    }}
-                                />
-                            </div>
-                            <div className="mt-5">
-                                <FileUpload onChange={handleFileChange} />
-                            </div>
-                        </DialogContentText>
-                    </DialogContent>
-                    <DialogActions>
-                        <Button className="w-full" variant="contained" type="submit">Post</Button>
-                    </DialogActions>
-                </form>
+                <DialogTitle className="text-center relative">
+                    <p>Create post</p>
+                    <IconButton
+                        color="inherit"
+                        className="!absolute top-3 right-4"
+                        onClick={handleClose}
+                        aria-label="close"
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText
+                        component={"div"}
+                        id="alert-dialog-slide-description"
+                    >
+                        <div className="flex flex-col pt-3">
+                            <TextField
+                                id="Content_textarea"
+                                name="Content_textarea"
+                                label="Post Content"
+                                placeholder={"What's on your mind?"}
+                                rows={4}
+                                className="w-full  custom-textfield"
+                                multiline
+                                onChange={handleContentChange}
+                                inputRef={contenteRef}
+                                InputProps={{
+                                    className: 'dark:text-slate-50 dark:placeholder:text-gray-400 ', // Text color and placeholder color
+                                    style: { whiteSpace: "pre-line", scrollbarWidth: 'thin' }, // Allow newline in placeholder
+                                }}
+                                InputLabelProps={{
+                                    className: 'dark:!text-white', // Change label color here
+                                }}
+                            />
+                        </div>
+                        <div className="mt-5">
+                            <FileUpload onChange={handleFileChange} />
+                        </div>
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button className="w-full" variant="contained" type="submit">Post</Button>
+                </DialogActions>
             </Dialog>
             <div className=" w-full relative maxWidth80vw">
                 <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />
