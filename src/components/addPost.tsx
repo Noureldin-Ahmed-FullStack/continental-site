@@ -8,7 +8,6 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Meteors } from "./ui/meteors";
 import { Input } from "./ui/aceternityInput";
 import FileUpload from "./ui/customFileUpload";
-import { SocialPost } from "../types";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -23,11 +22,13 @@ export default function AddPost() {
     const BaseURL = import.meta.env.VITE_BASE_URL;
     const { userData } = useUserContext()
     const [open, setOpen] = useState(false);
+    const [Images, setImages] = useState<File[]>([]);
     // const [items, setItems] = useState([]);
     const [ContentState, setContentState] = useState("");
     const contenteRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = (files: File[]) => {
+        setImages(files)
         console.log('Selected files:', files);
     };
     const handleEntered = () => {
@@ -48,8 +49,8 @@ export default function AddPost() {
     const handleClose = () => {
         setOpen(false);
     };
-    const addPost = (postData: SocialPost) => {
-        console.log({ content: ContentState });
+    const addPost = (postData: FormData) => {
+        console.log({ postData: postData });
         if (!userData) {
             console.log("Sign in first!");
 
@@ -70,9 +71,24 @@ export default function AddPost() {
             });
             return
         }
+        if (ContentState == "") {
+            toast.error("Post Cannot be empty!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return
+        }
         axios
             .post(`${BaseURL}post/${userData._id}`, postData)
             .then((response) => {
+                console.log(userData);
+                
                 console.log(response);
                 setContentState("")
                 if (contenteRef.current) {
@@ -116,9 +132,13 @@ export default function AddPost() {
                         event.preventDefault();
                         const formData = new FormData(event.currentTarget);
                         const formJson = Object.fromEntries((formData as any).entries());
-                        addPost({
-                            content: formJson.Content_textarea
+                        formData.append('content', formJson.Content_textarea)
+                        Array.from(Images).forEach((image) => {
+                            formData.append('Images', image);  // Append each image under the 'Images' key
                         });
+                        console.log(formData);
+
+                        addPost(formData);
                     },
                 }}
             >

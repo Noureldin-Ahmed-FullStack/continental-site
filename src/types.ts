@@ -3,18 +3,19 @@ export interface SocialPost{
     comments? : Comments[]
     createdBy?:UserData
     createdAt?:string
-    userPFP?:string
-    image?:string
+    role?:string
+    Images?:string[]
     _id?:string
 }
 export interface UserData{
     email:string
     _id:string
     name:string
+    userPFP:string
+    role: 'user'| 'admin' | 'dev' | 'teamlead'
 }
 export interface Comments{
-    userPFP:string
     content: string
-    createdBy:string
+    createdBy:UserData
     createdAt:string
 }

@@ -39,8 +39,6 @@ export function SinglePost(props: SocialPost) {
     return `${day}-${month}-${year}`;
   }
 
-  // Example usage:
-  console.log(formatDateTime("2024-10-20T11:53:18.111Z"));
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -62,33 +60,18 @@ export function SinglePost(props: SocialPost) {
   };
   return (
     <div className="">
-      <FullScreenDialog open={open} handleClose={handleClose} image={props.image} />
+      <FullScreenDialog open={open} handleClose={handleClose} Images={props.Images} />
       <CommentsModal postData={SelectedPost} open={CommentOpen} handleClose={handleCommentClose} />
       <div className=" w-full relative maxWidth80vw">
         <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />
         <div className="relative shadow-xl myLightPost dark:bg-gray-900 border border-gray-800 dark:text-gray-300 text-slate-700 pb-0 p-4 pt-4 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
-          {/* <div className="h-5 w-5 rounded-full border flex items-center justify-center mb-4 border-gray-500">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth="1.5"
-              stroke="currentColor"
-              className="h-2 w-2 text-gray-300"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4.5 4.5l15 15m0 0V8.25m0 11.25H8.25"
-              />
-            </svg>
-          </div> */}
+        
           <div className="flex justify-between mb-2 w-full">
             <div className='flex'>
-              <img className="me-2 w-12 h-12 rounded-full" src="https://lh3.googleusercontent.com/ogw/AF2bZyhDBgxnnU2NAM5oZkt1Qqel8eybqspUwEzqHDwy8R2-rvs=s32-c-mo" alt="PFP" />
+              <img className="me-2 w-12 h-12 rounded-full" src={props.createdBy?.userPFP} alt="PFP" />
               <div>
-                <a href="/" className="ProfileLink">Noureldin Ahmed</a>
-                <p>Admin</p>
+                <a href="/" className="ProfileLink">{props.createdBy?.name.toLocaleUpperCase()}</a>
+                <p>{props.createdBy?.role.toLocaleUpperCase()}</p>
               </div>
             </div>
             <div>
@@ -102,7 +85,7 @@ export function SinglePost(props: SocialPost) {
             {props.content}
           </p>
 
-          {props.image && <img onClick={handleClickOpen} className="w-full rounded-2xl cursor-pointer" src={props.image} />}
+          {props.Images && <img onClick={handleClickOpen} className="w-full rounded-2xl cursor-pointer" src={props.Images[0]} />}
           {/* <button className="border px-4 py-1 rounded-lg  border-gray-500 text-gray-300">
               Explore
             </button> */}
