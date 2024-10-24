@@ -1,21 +1,21 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { SocialPost } from '../types'
 const BaseURL = import.meta.env.VITE_BASE_URL;
-const fetchSocialPosts = async (pageNumber: number) => {
-    try {
-        const response = await axios.get(BaseURL + "post/" + pageNumber);
-        if (response) {
-            console.log(response.data);
-            
-            return response.data as SocialPost[];
-        }
-        return []
-    } catch (error) {
-        console.error(error);
-        return []
-    }
-
+// type SocialPostsResponse = {
+//     total: number;
+//     page: number;
+//     limit: number;
+//     nextPage: number | null;
+//     totalPages: number;
+//     posts: SocialPost[];
+// };
+type FetchSocialPostsParams = {
+    pageParam?: number; // Optional since it can be undefined
+  };
+export const fetchSocialPosts = async ({ pageParam }: FetchSocialPostsParams)=> {
+    const response = await axios.get(BaseURL + "post/" + pageParam);
+    return response.data;  // Assuming the response matches the SocialPostsResponse structure
 };
 const fetchSocialPostDetails = async (SocialPostId: string) => {
     try {
@@ -42,15 +42,20 @@ const sendPost = async (userID: string) => {
     }
 
 };
-export const useSocialPosts = (pageNumber: number) => {
-    return useQuery({
-        queryKey: ['SocialPosts', pageNumber],
-        queryFn: () => fetchSocialPosts(pageNumber),
-        staleTime: 5 * 60 * 1000, // 5 minutes
-        refetchOnWindowFocus: false, // Do not refetch on window focus
-    });
-};
-
+export const useSocialPosts = () => {
+    return useInfiniteQuery({
+        queryKey: ['SocialPosts'],
+        queryFn: fetchSocialPosts,
+        getNextPageParam: (lastPage) => {
+          return lastPage.page < lastPage.totalPages
+            ? lastPage.page + 1
+            : undefined;
+        },
+        initialPageParam: 1,
+        staleTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
+      });
+    }
 export const useSocialPostDetails = (SocialPostId: string) => {
     return useQuery({
         queryKey: ['SocialPostDetails', SocialPostId],

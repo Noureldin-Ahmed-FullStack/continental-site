@@ -1,13 +1,19 @@
 import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { SocialPost } from "../../types";
+import DeleteIcon from '@mui/icons-material/Delete';
+import ImageIcon from '@mui/icons-material/Image';
 import { Meteors } from "./meteors";
 import FullScreenDialog from "./mui-modal";
-import { Button } from "@mui/material";
+import { Button, Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import CommentsModal from './CommentsModal';
+import { useUserContext } from '../../context/UserContext';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
 
 export function SinglePost(props: SocialPost) {
   const [open, setOpen] = useState(false);
+  const { userData } = useUserContext()
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [SelectedPost, setSelectedPost] = useState<SocialPost>({});
   function formatDateTime(timestamp: string | undefined) {
     if (!timestamp) {
@@ -58,24 +64,62 @@ export function SinglePost(props: SocialPost) {
   const handleCommentClose = () => {
     setCommentOpen(false);
   };
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>, postID: string | undefined) => {
+      setAnchorEl(event.currentTarget);
+      console.log(postID);
+    },
+    []
+  );
+  const handleCloseMenu = () => {
+    setAnchorEl(null);
+  };
+  const menuOpen = Boolean(anchorEl);
   return (
     <div className="">
+      <Menu
+        id="basic-menu"
+        open={menuOpen}
+        anchorEl={anchorEl}
+        onClose={handleCloseMenu}
+        disableScrollLock // Add this line
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+          className: 'bg-zinc-800 text-white',
+        }}
+      >
+        <MenuItem className="!flex !justify-start hover:!bg-zinc-700" onClick={handleCloseMenu}>
+          <ImageIcon color="info" /> <p className="ps-2">Edit</p>
+        </MenuItem>
+        <Divider sx={{ borderBottomWidth: 1, opacity: '0.2', bgcolor: 'white' }} />
+        <MenuItem className="!flex !justify-start hover:!bg-zinc-700" onClick={handleCloseMenu}>
+          <DeleteIcon color="error" /> <p className="ps-2">Delete</p>
+        </MenuItem>
+      </Menu>
       <FullScreenDialog open={open} handleClose={handleClose} Images={props.Images} />
       <CommentsModal postData={SelectedPost} open={CommentOpen} handleClose={handleCommentClose} />
       <div className=" w-full relative maxWidth80vw">
         <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />
         <div className="relative shadow-xl myLightPost dark:bg-gray-900 border border-gray-800 dark:text-gray-300 text-slate-700 pb-0 p-4 pt-4 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
-        
           <div className="flex justify-between mb-2 w-full">
             <div className='flex'>
               <img className="me-2 w-12 h-12 rounded-full" src={props.createdBy?.userPFP} alt="PFP" />
               <div>
                 <a href="/" className="ProfileLink">{props.createdBy?.name.toLocaleUpperCase()}</a>
-                <p>{props.createdBy?.role.toLocaleUpperCase()}</p>
+                <p>{props.createdBy?.role.toLocaleUpperCase()} · <span className='text-xs'>{formatDateTime(props.createdAt)}</span></p>
               </div>
             </div>
             <div>
-              <p>{formatDateTime(props.createdAt)}</p>
+              <div className='flex items-start'>{userData?._id == props.createdBy?._id && <div>
+                <IconButton
+                  id="basic-button"
+                  sx={{ color: 'inherit' }}
+                  onClick={(event) => handleClick(event, props?._id)}
+                >
+                  <MoreVertIcon />
+                </IconButton>
+              </div>}
+              </div>
             </div>
           </div>
           <p className={"font-normal w-full text-base whitespace-pre-line text-slate-500 mb-4 relative z-10" + (props.content && /[\u0600-\u06FF]/.test(props.content) ? " text-end" : "")}>

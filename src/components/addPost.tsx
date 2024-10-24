@@ -8,6 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Meteors } from "./ui/meteors";
 import { Input } from "./ui/aceternityInput";
 import FileUpload from "./ui/customFileUpload";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -23,6 +24,7 @@ export default function AddPost() {
     const { userData } = useUserContext()
     const [open, setOpen] = useState(false);
     const [Images, setImages] = useState<File[]>([]);
+    const queryClient = useQueryClient();
     // const [items, setItems] = useState([]);
     const [ContentState, setContentState] = useState("");
     const contenteRef = useRef<HTMLInputElement | null>(null);
@@ -88,12 +90,13 @@ export default function AddPost() {
             .post(`${BaseURL}post/${userData._id}`, postData)
             .then((response) => {
                 console.log(userData);
-                
+
                 console.log(response);
                 setContentState("")
                 if (contenteRef.current) {
                     contenteRef.current.value = '';
                 }
+                queryClient.refetchQueries({ queryKey: ['SocialPosts'] });
                 handleClose();
 
                 // FetchPosts()
