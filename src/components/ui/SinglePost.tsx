@@ -4,14 +4,13 @@ import { SocialPost } from "../../types";
 import DeleteIcon from '@mui/icons-material/Delete';
 import ImageIcon from '@mui/icons-material/Image';
 import { Meteors } from "./meteors";
-import FullScreenDialog from "./mui-modal";
 import { Button, Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import CommentsModal from './CommentsModal';
 import { useUserContext } from '../../context/UserContext';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ImageGallery from './ImageDisplay';
 
 export function SinglePost(props: SocialPost) {
-  const [open, setOpen] = useState(false);
   const { userData } = useUserContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [SelectedPost, setSelectedPost] = useState<SocialPost>({});
@@ -45,14 +44,6 @@ export function SinglePost(props: SocialPost) {
     return `${day}-${month}-${year}`;
   }
 
-
-  const handleClickOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
 
   const [CommentOpen, setCommentOpen] = useState(false);
 
@@ -96,7 +87,6 @@ export function SinglePost(props: SocialPost) {
           <DeleteIcon color="error" /> <p className="ps-2">Delete</p>
         </MenuItem>
       </Menu>
-      <FullScreenDialog open={open} handleClose={handleClose} Images={props.Images} />
       <CommentsModal postData={SelectedPost} open={CommentOpen} handleClose={handleCommentClose} />
       <div className=" w-full relative maxWidth80vw">
         <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />
@@ -129,7 +119,7 @@ export function SinglePost(props: SocialPost) {
             {props.content}
           </p>
 
-          {props.Images && <img onClick={handleClickOpen} className="w-full rounded-2xl cursor-pointer" src={props.Images[0]} />}
+          {props.Images && <ImageGallery imageUrls={props.Images}/>}
           {/* <button className="border px-4 py-1 rounded-lg  border-gray-500 text-gray-300">
               Explore
             </button> */}

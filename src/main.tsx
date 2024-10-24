@@ -7,7 +7,7 @@ import './styles/Post.css'
 import './styles/ExtraComponents.css'
 import './styles/navbar.css'
 import { ToastContainer } from 'react-toastify';
-
+import "yet-another-react-lightbox/styles.css";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './components/HomePage.tsx'
 import { ClerkProvider, SignIn, SignUp } from '@clerk/clerk-react'
