@@ -9,6 +9,8 @@ import { IconButton, Slide } from '@mui/material';
 import { SocialPost } from '../../types';
 import { PlaceholdersAndVanishInput } from './placeholders-and-vanish-input';
 import CloseTwoToneIcon from '@mui/icons-material/CloseTwoTone';
+import { useUserContext } from '../../context/UserContext';
+import ImageGallery from './ImageDisplay';
 const placeholders = [
     "What's the first rule of Fight Club?",
     "Who is Tyler Durden?",
@@ -18,6 +20,7 @@ const placeholders = [
 ];
 const handleChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
     // console.log(e.target.value);
+    return
 };
 const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -40,8 +43,7 @@ interface props {
 }
 export default function CommentsModal(props: props) {
     const { handleClose, open, postData } = props
-    console.log(postData);
-
+    const { userData } = useUserContext()
     return (
         <React.Fragment>
             <Dialog
@@ -57,7 +59,8 @@ export default function CommentsModal(props: props) {
                     },
                 }}
             >
-                <DialogTitle sx={{ justifyContent: "space-between", display: 'flex' }}><p>Comments</p> <IconButton color='inherit' aria-label="close">
+                <DialogTitle sx={{ justifyContent: "space-between", display: 'flex' }}><p>Comments</p> 
+                <IconButton onClick={handleClose} color='inherit' aria-label="close">
                     <CloseTwoToneIcon />
                 </IconButton></DialogTitle>
                 <DialogContent className='CommentScreen'>
@@ -70,22 +73,22 @@ export default function CommentsModal(props: props) {
                             m: 'auto',
                         }}
                     >
-                        <p className={"my-3 text-start" + (postData.content && /[\u0600-\u06FF]/.test(postData.content) ? " text-end" : "")}>
+                        <p className={"my-3 text-start whitespace-pre-wrap" + (postData.content && /[\u0600-\u06FF]/.test(postData.content) ? " text-end" : "")}>
                             {postData.content || ""}
                         </p>
-                        {postData.image && <img src={postData.image} className="rounded-lg" alt={postData.content} />}
+                        {postData.Images && postData.Images?.length != 0 && <ImageGallery imageUrls={postData.Images}/>}
                         <div className='mt-3'>
                             {postData.comments?.map((item, index) => (
                                 <div className='flex justify-start my-2' key={index}>
-                                    <img className='h-10 w-10 rounded-full' src={item.userPFP} alt="pfp" />
-                                    <div className='bg-zinc-700 opacity-70 w-full ms-5 rounded-lg px-3'>{item.content}</div>
+                                    <img className='h-10 w-10 rounded-full' src={item.createdBy.userPFP} alt="pfp" />
+                                    <div className='bg-zinc-700 opacity-70 w-full ms-5 rounded-lg px-3 whitespace-pre-wrap'>{item.content}</div>
                                 </div>
                             ))}
                         </div>
                     </Box>
                 </DialogContent>
                 <DialogActions sx={{ justifyContent: "start" }}>
-                    <img className='h-10 w-10 rounded-full' src="https://ssniper.sirv.com/Images/my%20portfolio/pfp.jpg" alt="pfp" />
+                    <img className='h-10 w-10 rounded-full' src={userData?.userPFP} alt="pfp" />
                     <PlaceholdersAndVanishInput
                         placeholders={placeholders}
                         onChange={handleChange}

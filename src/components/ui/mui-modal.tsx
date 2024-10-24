@@ -20,10 +20,10 @@ interface props {
   open: boolean; // The state itself
   // setOpen: React.Dispatch<React.SetStateAction<boolean>>; // The setter function
   handleClose: () => void
-  image?: string
+  Images?: string[]
 }
 export default function FullScreenDialog(props: props) {
-  const {handleClose, open, image } = props
+  const {handleClose, open, Images } = props
 
   return (
     <React.Fragment>
@@ -58,11 +58,11 @@ export default function FullScreenDialog(props: props) {
             alignItems: 'center',
           }}
         >
-          <img
-            src={image}
+          {Images && <img
+            src={Images[0]}
             alt="Dialog Image"
             style={{ maxHeight: '100%', width: 'auto' }} // Keeps aspect ratio while limiting height
-          />
+          />}
         </DialogContent>
       </Dialog>
     </React.Fragment>

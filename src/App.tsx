@@ -22,7 +22,7 @@ function App() {
       const bodyData = {
         name:user.fullName,
         email:user.primaryEmailAddress?.emailAddress,
-        userID:user.id,
+        _id:user.id,
         userPFP: user.imageUrl,
       }
       console.log(bodyData);
@@ -30,8 +30,8 @@ function App() {
       axios
         .post(`${BaseURL}signUp`, bodyData)
         .then((response) => {
-          console.log("Success:", response.data);
-          setUserData(response.data)
+          console.log("Success:", response.data.userData);
+          setUserData(response.data.userData)
         })
     }
   }, [isLoaded, isSignedIn, user])

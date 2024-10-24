@@ -7,7 +7,7 @@ import './styles/Post.css'
 import './styles/ExtraComponents.css'
 import './styles/navbar.css'
 import { ToastContainer } from 'react-toastify';
-
+import "yet-another-react-lightbox/styles.css";
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import HomePage from './components/HomePage.tsx'
 import { ClerkProvider, SignIn, SignUp } from '@clerk/clerk-react'
@@ -16,6 +16,7 @@ import NotFoundPage from './components/NotFoundPage.tsx'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import SocialPage from './components/Pages/SocialPage.tsx'
+import 'react-toastify/dist/ReactToastify.css';
 import Managment from './components/Pages/Managment.tsx'
 const PUBLISHABLE_KEY = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY
 

@@ -1,6 +1,6 @@
 import { Button, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, IconButton, Slide, TextField } from "@mui/material";
 import axios from "axios";
-import React, { useRef, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useUserContext } from "../context/UserContext";
 import { toast } from "react-toastify";
 import { TransitionProps } from "@mui/material/transitions";
@@ -8,6 +8,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import { Meteors } from "./ui/meteors";
 import { Input } from "./ui/aceternityInput";
 import FileUpload from "./ui/customFileUpload";
+import { useQueryClient } from "@tanstack/react-query";
 
 const Transition = React.forwardRef(function Transition(
     props: TransitionProps & {
@@ -22,11 +23,14 @@ export default function AddPost() {
     const BaseURL = import.meta.env.VITE_BASE_URL;
     const { userData } = useUserContext()
     const [open, setOpen] = useState(false);
+    const [Images, setImages] = useState<File[]>([]);
+    const queryClient = useQueryClient();
     // const [items, setItems] = useState([]);
     const [ContentState, setContentState] = useState("");
     const contenteRef = useRef<HTMLInputElement | null>(null);
 
     const handleFileChange = (files: File[]) => {
+        setImages(files)
         console.log('Selected files:', files);
     };
     const handleEntered = () => {
@@ -38,26 +42,63 @@ export default function AddPost() {
     const handleClickOpen = () => {
         setOpen(true);
     };
-    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setContentState(e.target.value)
-    }
+    const handleContentChange = useCallback(
+        (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+            setContentState(e.target.value);
+        },
+        [setContentState] // Add dependencies here
+    );
     const handleClose = () => {
         setOpen(false);
     };
-    const addPost = () => {
-        console.log({ content: ContentState });
+    const addPost = (postData: FormData) => {
+        console.log({ postData: postData });
+        if (!userData) {
+            console.log("Sign in first!");
+
+            setContentState("")
+            if (contenteRef.current) {
+                contenteRef.current.value = '';
+            }
+            handleClose();
+            toast.error("Sign in first!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return
+        }
+        if (ContentState == "") {
+            toast.error("Post Cannot be empty!", {
+                position: "top-center",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: true,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+            });
+            return
+        }
         axios
-            .post(`${BaseURL}/post`, {
-                createdBy: userData?._id,
-                Post: { content: ContentState }
-            })
+            .post(`${BaseURL}post/${userData._id}`, postData)
             .then((response) => {
+                console.log(userData);
+
                 console.log(response);
-                handleClose();
                 setContentState("")
                 if (contenteRef.current) {
                     contenteRef.current.value = '';
                 }
+                queryClient.refetchQueries({ queryKey: ['SocialPosts'] });
+                handleClose();
+
                 // FetchPosts()
             })
             .catch((error) => {
@@ -75,34 +116,7 @@ export default function AddPost() {
                 handleClose();
             });
     };
-    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        addPost();
-    };
 
-    // const FetchPosts = () => {
-    //     axios
-    //         .post(`${BaseURL}/GetPosts`)
-    //         .then((response) => {
-    //             console.log(response.data);
-    //             setItems(response.data);
-    //         })
-    //         .catch((error) => {
-    //             console.error("Error:", error);
-    //             toast.error(error.message, {
-    //                 position: "top-center",
-    //                 autoClose: 5000,
-    //                 hideProgressBar: false,
-    //                 closeOnClick: true,
-    //                 pauseOnHover: true,
-    //                 draggable: true,
-    //                 progress: undefined,
-    //                 theme: "light",
-    //             });
-    //         });
-    // }
-
-    // const placeholderText = "ex: \n1- Make Breakfast\n2- Do dishes";
     return (
         <div>
             <Dialog
@@ -111,10 +125,24 @@ export default function AddPost() {
                 open={open}
                 TransitionComponent={Transition}
                 keepMounted
+                maxWidth="md"
                 onClose={handleClose}
                 aria-describedby="alert-dialog-slide-description"
                 PaperProps={{
-                    className: '!bg-slate-50 dark:!bg-slate-800 dark:!text-slate-50'
+                    className: '!bg-slate-50 dark:!bg-slate-800 dark:!text-slate-50',
+                    component: 'form',
+                    onSubmit: async (event: React.FormEvent<HTMLFormElement>) => {
+                        event.preventDefault();
+                        const formData = new FormData(event.currentTarget);
+                        const formJson = Object.fromEntries((formData as any).entries());
+                        formData.append('content', formJson.Content_textarea)
+                        Array.from(Images).forEach((image) => {
+                            formData.append('Images', image);  // Append each image under the 'Images' key
+                        });
+                        console.log(formData);
+
+                        addPost(formData);
+                    },
                 }}
             >
                 <DialogTitle className="text-center relative">
@@ -133,34 +161,33 @@ export default function AddPost() {
                         component={"div"}
                         id="alert-dialog-slide-description"
                     >
-                        <form onSubmit={handleSubmit}>
-                            <div className="flex flex-col pt-3">
-                                <TextField
-                                    id="Content-textarea"
-                                    label="Post Content"
-                                    placeholder={"What's on your mind?"}
-                                    rows={4}
-                                    className="w-full  custom-textfield"
-                                    multiline
-                                    onChange={handleContentChange}
-                                    inputRef={contenteRef}
-                                    InputProps={{
-                                        className: 'dark:text-slate-50 dark:placeholder:text-gray-400 ', // Text color and placeholder color
-                                        style: { whiteSpace: "pre-line", scrollbarWidth: 'thin' }, // Allow newline in placeholder
-                                    }}
-                                    InputLabelProps={{
-                                        className: 'dark:!text-white', // Change label color here
-                                    }}
-                                />
-                            </div>
-                            <div className="mt-5">
-                                <FileUpload onChange={handleFileChange} />
-                            </div>
-                        </form>
+                        <div className="flex flex-col pt-3">
+                            <TextField
+                                id="Content_textarea"
+                                name="Content_textarea"
+                                label="Post Content"
+                                placeholder={"What's on your mind?"}
+                                rows={4}
+                                className="w-full  custom-textfield"
+                                multiline
+                                onChange={handleContentChange}
+                                inputRef={contenteRef}
+                                InputProps={{
+                                    className: 'dark:text-slate-50 dark:placeholder:text-gray-400 ', // Text color and placeholder color
+                                    style: { whiteSpace: "pre-line", scrollbarWidth: 'thin' }, // Allow newline in placeholder
+                                }}
+                                InputLabelProps={{
+                                    className: 'dark:!text-white', // Change label color here
+                                }}
+                            />
+                        </div>
+                        <div className="mt-5">
+                            <FileUpload onChange={handleFileChange} />
+                        </div>
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button className="w-full" variant="contained" onClick={addPost}>Post</Button>
+                    <Button className="w-full" variant="contained" type="submit">Post</Button>
                 </DialogActions>
             </Dialog>
             <div className=" w-full relative maxWidth80vw">
