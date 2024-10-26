@@ -22,6 +22,7 @@ const Transition = React.forwardRef(function Transition(
 export default function AddPost() {
     const BaseURL = import.meta.env.VITE_BASE_URL;
     const { userData } = useUserContext()
+    const [PendingRequest, setPendingRequest] = useState(false);
     const [open, setOpen] = useState(false);
     const [Images, setImages] = useState<File[]>([]);
     const queryClient = useQueryClient();
@@ -51,7 +52,7 @@ export default function AddPost() {
     const handleClose = () => {
         setOpen(false);
     };
-    const addPost = (postData: FormData) => {
+    const addPost = async(postData: FormData) => {
         console.log({ postData: postData });
         if (!userData) {
             console.log("Sign in first!");
@@ -86,7 +87,8 @@ export default function AddPost() {
             });
             return
         }
-        axios
+        setPendingRequest(true)
+        await axios
             .post(`${BaseURL}post/${userData._id}`, postData)
             .then((response) => {
                 console.log(userData);
@@ -97,6 +99,7 @@ export default function AddPost() {
                     contenteRef.current.value = '';
                 }
                 queryClient.refetchQueries({ queryKey: ['SocialPosts'] });
+                setPendingRequest(false)
                 handleClose();
 
                 // FetchPosts()
@@ -113,6 +116,7 @@ export default function AddPost() {
                     progress: undefined,
                     theme: "light",
                 });
+                setPendingRequest(false)
                 handleClose();
             });
     };
@@ -187,7 +191,7 @@ export default function AddPost() {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button className="w-full" variant="contained" type="submit">Post</Button>
+                    <Button className="w-full" disabled={PendingRequest} variant="contained" type="submit">Post</Button>
                 </DialogActions>
             </Dialog>
             <div className=" w-full relative maxWidth80vw">
