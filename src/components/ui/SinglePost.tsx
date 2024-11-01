@@ -2,7 +2,8 @@ import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import { useCallback, useState } from "react";
 import { SocialPost } from "../../types";
 import DeleteIcon from '@mui/icons-material/Delete';
-import ImageIcon from '@mui/icons-material/Image';
+import EditIcon from '@mui/icons-material/Edit';
+
 import { Meteors } from "./meteors";
 import { Button, Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import CommentsModal from './CommentsModal';
@@ -113,7 +114,7 @@ export function SinglePost(props: SocialPost) {
         }}
       >
         <MenuItem className="!flex !justify-start hover:!bg-zinc-700" onClick={handleCloseMenu}>
-          <ImageIcon color="info" /> <p className="ps-2">Edit</p>
+          <EditIcon color="info" /> <p className="ps-2">Edit</p>
         </MenuItem>
         <Divider sx={{ borderBottomWidth: 1, opacity: '0.2', bgcolor: 'white' }} />
         <MenuItem className="!flex !justify-start hover:!bg-zinc-700" onClick={handleOpenDialog}>

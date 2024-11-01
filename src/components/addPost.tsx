@@ -198,7 +198,7 @@ export default function AddPost() {
                 <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />
                 <div className="relative shadow-xl myLightPost dark:bg-gray-900 border border-gray-800 dark:text-gray-300 text-slate-700 p-4 pt-4 h-full overflow-hidden rounded-2xl flex flex-col justify-end items-start">
                     <div className="flex w-full">
-                        <img className="me-2 w-12 h-12 rounded-full" src="https://lh3.googleusercontent.com/ogw/AF2bZyhDBgxnnU2NAM5oZkt1Qqel8eybqspUwEzqHDwy8R2-rvs=s32-c-mo" alt="PFP" />
+                        <img className="me-2 w-12 h-12 rounded-full" src={userData?.userPFP} alt="PFP" />
                         <div className="w-full">
 
                             <div className="mb-4 p-[2px] rounded-lg transition duration-300 group/input">
