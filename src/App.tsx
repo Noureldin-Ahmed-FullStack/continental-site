@@ -9,7 +9,7 @@ function App() {
   const BaseURL = import.meta.env.VITE_BASE_URL;
   const { isLoaded, isSignedIn, user } = useUser();
   const { setUserData } = useUserContext();
-  
+
   const navbarItems = [
     { name: 'Home', link: 'home' }, { name: 'social', link: 'social' }, { name: 'News', link: 'News' }, { name: 'Managment', link: 'Managment' }
   ]
@@ -17,12 +17,12 @@ function App() {
     if (!user && !isSignedIn) {
       setUserData(null)
       return
-    }else{
-      
+    } else {
+
       const bodyData = {
-        name:user.fullName,
-        email:user.primaryEmailAddress?.emailAddress,
-        _id:user.id,
+        name: user.fullName,
+        email: user.primaryEmailAddress?.emailAddress,
+        _id: user.id,
         userPFP: user.imageUrl,
       }
       console.log(bodyData);
@@ -32,6 +32,8 @@ function App() {
         .then((response) => {
           console.log("Success:", response.data.userData);
           setUserData(response.data.userData)
+        }).catch((error) => {
+          console.log(error);
         })
     }
   }, [isLoaded, isSignedIn, user])

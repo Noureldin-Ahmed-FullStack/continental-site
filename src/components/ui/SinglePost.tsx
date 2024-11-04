@@ -2,18 +2,23 @@ import ModeCommentOutlinedIcon from '@mui/icons-material/ModeCommentOutlined';
 import { useCallback, useState } from "react";
 import { SocialPost } from "../../types";
 import DeleteIcon from '@mui/icons-material/Delete';
-import ImageIcon from '@mui/icons-material/Image';
+import EditIcon from '@mui/icons-material/Edit';
+
 import { Meteors } from "./meteors";
 import { Button, Divider, IconButton, Menu, MenuItem } from "@mui/material";
 import CommentsModal from './CommentsModal';
 import { useUserContext } from '../../context/UserContext';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import ImageGallery from './ImageDisplay';
+import CustomDialog from './ModalWithChildren';
+import axios from 'axios';
+import { useQueryClient } from '@tanstack/react-query';
 
 export function SinglePost(props: SocialPost) {
   const { userData } = useUserContext()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [SelectedPost, setSelectedPost] = useState<SocialPost>({});
+  const BaseURL = import.meta.env.VITE_BASE_URL;
   function formatDateTime(timestamp: string | undefined) {
     if (!timestamp) {
       return
@@ -43,7 +48,36 @@ export function SinglePost(props: SocialPost) {
 
     return `${day}-${month}-${year}`;
   }
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
+  const queryClient = useQueryClient();
+  const handleOpenDialog = () => {
+    setAnchorEl(null)
+    setIsDialogOpen(true)
+  };
+  const handleCloseDialog = () => {
+    setAnchorEl(null)
+    setIsDialogOpen(false)
+  };
+
+  const handleConfirmAction = async (postID: string | undefined) => {
+    // Perform your confirm action here
+    if (!postID) {
+      console.log("something went wrong with postID");
+      handleCloseDialog();
+      return
+    }
+    console.log('Confirmed!', postID);
+
+    try {
+      const response = await axios.delete(BaseURL + "post/" + postID);
+      queryClient.refetchQueries({ queryKey: ['SocialPosts'] });
+      console.log(response);
+    } catch (error) {
+      console.log(error);
+    }
+    handleCloseDialog();
+  };
 
   const [CommentOpen, setCommentOpen] = useState(false);
 
@@ -80,13 +114,24 @@ export function SinglePost(props: SocialPost) {
         }}
       >
         <MenuItem className="!flex !justify-start hover:!bg-zinc-700" onClick={handleCloseMenu}>
-          <ImageIcon color="info" /> <p className="ps-2">Edit</p>
+          <EditIcon color="info" /> <p className="ps-2">Edit</p>
         </MenuItem>
         <Divider sx={{ borderBottomWidth: 1, opacity: '0.2', bgcolor: 'white' }} />
-        <MenuItem className="!flex !justify-start hover:!bg-zinc-700" onClick={handleCloseMenu}>
+        <MenuItem className="!flex !justify-start hover:!bg-zinc-700" onClick={handleOpenDialog}>
           <DeleteIcon color="error" /> <p className="ps-2">Delete</p>
         </MenuItem>
       </Menu>
+      <CustomDialog
+        open={isDialogOpen}
+        onClose={handleCloseDialog}
+        onConfirm={() => handleConfirmAction(props._id)}
+        title="Delete post"
+        confirmColor='error'
+        confirmText="Delete"
+        cancelText="cancel"
+      >
+        <p>Are you sure you want to Delete this post?</p>
+      </CustomDialog>
       <CommentsModal postData={SelectedPost} open={CommentOpen} handleClose={handleCommentClose} />
       <div className=" w-full relative maxWidth80vw">
         <div className="absolute inset-0 h-full w-full bg-gradient-to-r from-blue-500 to-teal-500 transform scale-[0.80] rounded-full blur-3xl" />
@@ -119,7 +164,7 @@ export function SinglePost(props: SocialPost) {
             {props.content}
           </p>
 
-          {props.Images && <ImageGallery imageUrls={props.Images}/>}
+          {props.Images && <ImageGallery imageUrls={props.Images} />}
           {/* <button className="border px-4 py-1 rounded-lg  border-gray-500 text-gray-300">
               Explore
             </button> */}
